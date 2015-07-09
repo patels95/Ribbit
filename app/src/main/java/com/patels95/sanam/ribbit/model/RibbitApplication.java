@@ -1,4 +1,4 @@
-package com.patels95.sanam.ribbit;
+package com.patels95.sanam.ribbit.model;
 
 import android.app.Application;
 

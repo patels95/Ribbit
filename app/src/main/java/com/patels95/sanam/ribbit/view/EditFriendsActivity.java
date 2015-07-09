@@ -1,10 +1,9 @@
-package com.patels95.sanam.ribbit;
+package com.patels95.sanam.ribbit.view;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -17,6 +16,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.patels95.sanam.ribbit.model.ParseConstants;
+import com.patels95.sanam.ribbit.R;
 
 import java.util.List;
 

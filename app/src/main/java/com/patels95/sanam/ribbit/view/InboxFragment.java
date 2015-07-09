@@ -1,10 +1,12 @@
-package com.patels95.sanam.ribbit;
+package com.patels95.sanam.ribbit.view;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.patels95.sanam.ribbit.R;
 
 public class InboxFragment extends ListFragment {
 

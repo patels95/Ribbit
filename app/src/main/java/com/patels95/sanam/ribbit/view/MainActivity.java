@@ -1,4 +1,4 @@
-package com.patels95.sanam.ribbit;
+package com.patels95.sanam.ribbit.view;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -19,6 +19,8 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
+import com.patels95.sanam.ribbit.R;
+import com.patels95.sanam.ribbit.adapters.SectionsPagerAdapter;
 
 import java.io.File;
 import java.io.FileNotFoundException;

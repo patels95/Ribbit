@@ -1,4 +1,4 @@
-package com.patels95.sanam.ribbit;
+package com.patels95.sanam.ribbit.view;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -14,6 +14,8 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.patels95.sanam.ribbit.model.ParseConstants;
+import com.patels95.sanam.ribbit.R;
 
 import java.util.List;
 
