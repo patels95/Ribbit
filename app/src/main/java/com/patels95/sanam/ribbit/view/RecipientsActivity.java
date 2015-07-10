@@ -3,6 +3,7 @@ package com.patels95.sanam.ribbit.view;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +22,7 @@ import com.patels95.sanam.ribbit.model.ParseConstants;
 
 import java.util.List;
 
-public class RecipientsActivity extends ListActivity {
+public class RecipientsActivity extends ActionBarActivity {
 
     public static final String TAG = RecipientsActivity.class.getSimpleName();
 
@@ -34,11 +35,10 @@ public class RecipientsActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_recipients);
 
-        // allow user to select multiple items
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
     }
 
     @Override
@@ -64,55 +64,4 @@ public class RecipientsActivity extends ListActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mCurrentUser = ParseUser.getCurrentUser();
-        mFriendsRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
-        setProgressBarIndeterminateVisibility(true);
-
-        ParseQuery<ParseUser> query = mFriendsRelation.getQuery();
-        query.addAscendingOrder(ParseConstants.KEY_USERNAME);
-
-        query.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> friends, ParseException e) {
-                setProgressBarIndeterminateVisibility(false);
-                if (e == null) {
-                    mFriends = friends;
-
-                    String[] usernames = new String[mFriends.size()];
-                    int i = 0;
-                    for (ParseUser user : mFriends) {
-                        usernames[i] = user.getUsername();
-                        i++;
-                    }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                            RecipientsActivity.this,
-                            android.R.layout.simple_list_item_checked,
-                            usernames);
-                    setListAdapter(adapter);
-                } else {
-                    Log.e(TAG, e.getMessage());
-                    errorAlert(e);
-                }
-            }
-        });
-    }
-
-    private void errorAlert(ParseException e){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getListView().getContext());
-        builder.setMessage(e.getMessage())
-                .setTitle(R.string.error_title)
-                .setPositiveButton(android.R.string.ok, null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        mSendMenuItem.setVisible(true);
-    }
 }
