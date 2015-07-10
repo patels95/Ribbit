@@ -2,7 +2,9 @@ package com.patels95.sanam.ribbit.view;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -22,7 +24,8 @@ import com.patels95.sanam.ribbit.model.ParseConstants;
 
 import java.util.List;
 
-public class RecipientsActivity extends ActionBarActivity {
+public class RecipientsActivity extends ActionBarActivity
+        implements RecipientsFragment.OnFragmentInteractionListener {
 
     public static final String TAG = RecipientsActivity.class.getSimpleName();
 
@@ -30,7 +33,7 @@ public class RecipientsActivity extends ActionBarActivity {
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
 
-    protected MenuItem mSendMenuItem;
+    protected static MenuItem mSendMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,10 @@ public class RecipientsActivity extends ActionBarActivity {
         supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_recipients);
 
-
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, RecipientsFragment.newInstance())
+                .commit();
     }
 
     @Override
@@ -64,4 +70,12 @@ public class RecipientsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public static MenuItem getMenuItem(){
+        return mSendMenuItem;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }

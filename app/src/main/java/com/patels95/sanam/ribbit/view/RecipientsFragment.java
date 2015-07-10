@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -25,14 +23,6 @@ import com.patels95.sanam.ribbit.model.ParseConstants;
 
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RecipientsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link RecipientsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RecipientsFragment extends ListFragment {
 
     public static final String TAG = RecipientsActivity.class.getSimpleName();
@@ -43,25 +33,12 @@ public class RecipientsFragment extends ListFragment {
 
     protected MenuItem mSendMenuItem;
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private String mParam1;
-
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RecipientsFragment.
-     */
 
-    public static RecipientsFragment newInstance(String param1, String param2) {
+    public static RecipientsFragment newInstance() {
         RecipientsFragment fragment = new RecipientsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,13 +50,6 @@ public class RecipientsFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-        }
-
-        // allow user to select multiple items
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }
 
     @Override
@@ -89,7 +59,6 @@ public class RecipientsFragment extends ListFragment {
         return inflater.inflate(R.layout.fragment_recipients, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -99,6 +68,9 @@ public class RecipientsFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
+        // allow user to select multiple list items
+        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
         mCurrentUser = ParseUser.getCurrentUser();
         mFriendsRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
         getActivity().setProgressBarIndeterminateVisibility(true);
@@ -144,7 +116,14 @@ public class RecipientsFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        mSendMenuItem.setVisible(true);
+        mSendMenuItem = RecipientsActivity.getMenuItem();
+
+        if (l.getCheckedItemCount() > 0){
+            mSendMenuItem.setVisible(true);
+        }
+        else{
+            mSendMenuItem.setVisible(false);
+        }
     }
 
     @Override
@@ -175,7 +154,7 @@ public class RecipientsFragment extends ListFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         public void onFragmentInteraction(Uri uri);
     }
 
