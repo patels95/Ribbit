@@ -21,18 +21,18 @@ import com.parse.ParseUser;
 import com.patels95.sanam.ribbit.R;
 import com.patels95.sanam.ribbit.model.ParseConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipientsFragment extends ListFragment {
 
-    public static final String TAG = RecipientsActivity.class.getSimpleName();
+    public static final String TAG = RecipientsFragment.class.getSimpleName();
 
     protected List<ParseUser> mFriends;
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
 
     protected MenuItem mSendMenuItem;
-
     private OnFragmentInteractionListener mListener;
 
 
@@ -113,6 +113,22 @@ public class RecipientsFragment extends ListFragment {
         dialog.show();
     }
 
+    // gets the ids of all recipients
+    // return value is used in RecipientsActivity
+    protected ArrayList<String> getRecipientIds() {
+        ArrayList<java.lang.String> recipientIds = new ArrayList<>();
+        for (int i = 0; i < getListView().getCount(); i++){
+            if(getListView().isItemChecked(i)){
+                recipientIds.add(mFriends.get(i).getObjectId());
+            }
+        }
+        return recipientIds;
+    }
+
+    public ListView getList(){
+        return getListView();
+    }
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
@@ -157,5 +173,4 @@ public class RecipientsFragment extends ListFragment {
 
         public void onFragmentInteraction(Uri uri);
     }
-
 }

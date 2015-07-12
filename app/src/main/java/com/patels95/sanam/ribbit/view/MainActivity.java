@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.parse.ParseUser;
 import com.patels95.sanam.ribbit.R;
 import com.patels95.sanam.ribbit.adapters.SectionsPagerAdapter;
+import com.patels95.sanam.ribbit.model.ParseConstants;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -266,9 +267,19 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 mediaScanIntent.setData(mMediaUri);
                 sendBroadcast(mediaScanIntent);
             }
-
             Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
             recipientsIntent.setData(mMediaUri);
+
+            String fileType;
+            // set file type to either image or video
+            if (requestCode == PICK_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST){
+                fileType = ParseConstants.TYPE_IMAGE;
+            }
+            else {
+                fileType = ParseConstants.TYPE_VIDEO;
+            }
+
+            recipientsIntent.putExtra(ParseConstants.KEY_FILE_TYPE, fileType);
             startActivity(recipientsIntent);
         }
         else if (resultCode != RESULT_CANCELED) {

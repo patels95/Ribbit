@@ -16,12 +16,15 @@ import android.widget.ListView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.patels95.sanam.ribbit.R;
+import com.patels95.sanam.ribbit.model.FileHelper;
 import com.patels95.sanam.ribbit.model.ParseConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipientsActivity extends ActionBarActivity
@@ -29,11 +32,9 @@ public class RecipientsActivity extends ActionBarActivity
 
     public static final String TAG = RecipientsActivity.class.getSimpleName();
 
-    protected List<ParseUser> mFriends;
-    protected ParseRelation<ParseUser> mFriendsRelation;
-    protected ParseUser mCurrentUser;
-
     protected static MenuItem mSendMenuItem;
+    protected Uri mMediaUri;
+    protected String mFileType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +44,12 @@ public class RecipientsActivity extends ActionBarActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, RecipientsFragment.newInstance())
+                .replace(R.id.container, RecipientsFragment.newInstance(), getString(R.string.recipients_tag))
                 .commit();
+//        fragmentManager.executePendingTransactions();
+
+        mMediaUri = getIntent().getData();
+        mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
     }
 
     @Override
@@ -64,10 +69,33 @@ public class RecipientsActivity extends ActionBarActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_send) {
+            ParseObject message = createMessage();
+//            send(message);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected ParseObject createMessage() {
+        ParseObject message = new ParseObject(ParseConstants.CLASS_MESSAGES);
+        RecipientsFragment recipientsFragment = (RecipientsFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.recipients_tag));
+        message.put(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
+        message.put(ParseConstants.KEY_SENDER_NAME, ParseUser.getCurrentUser().getUsername());
+        message.put(ParseConstants.KEY_RECIPIENT_IDS, recipientsFragment.getRecipientIds());
+        message.put(ParseConstants.KEY_FILE_TYPE, mFileType);
+
+        byte[] fileBytes = FileHelper.getByteArrayFromFile(this, mMediaUri);
+        if (fileBytes == null) {
+            return null;
+        }
+        else {
+            if (mFileType.equals(ParseConstants.TYPE_IMAGE)) {
+                fileBytes = FileHelper.reduceImageForUpload(fileBytes);
+            }
+        }
+
+        return message;
     }
 
     public static MenuItem getMenuItem(){
