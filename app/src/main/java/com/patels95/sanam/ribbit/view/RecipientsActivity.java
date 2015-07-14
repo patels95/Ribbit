@@ -1,7 +1,6 @@
 package com.patels95.sanam.ribbit.view;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -9,23 +8,17 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.Toast;
 
-import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.patels95.sanam.ribbit.R;
 import com.patels95.sanam.ribbit.model.FileHelper;
 import com.patels95.sanam.ribbit.model.ParseConstants;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RecipientsActivity extends ActionBarActivity
         implements RecipientsFragment.OnFragmentInteractionListener {
@@ -70,11 +63,43 @@ public class RecipientsActivity extends ActionBarActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_send) {
             ParseObject message = createMessage();
-//            send(message);
+            if (message == null) {
+                // error
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(R.string.error_selected_file)
+                        .setTitle(R.string.error_title)
+                        .setPositiveButton(android.R.string.ok, null);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+            else {
+                send(message);
+                finish();
+            }
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void send(ParseObject message) {
+        message.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null){
+                    // success
+                    Toast.makeText(RecipientsActivity.this, R.string.success_message, Toast.LENGTH_LONG).show();
+                }
+                else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this);
+                    builder.setMessage(getString(R.string.error_sending_message))
+                            .setTitle(R.string.error_title)
+                            .setPositiveButton(android.R.string.ok, null);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            }
+        });
     }
 
     protected ParseObject createMessage() {
@@ -93,9 +118,11 @@ public class RecipientsActivity extends ActionBarActivity
             if (mFileType.equals(ParseConstants.TYPE_IMAGE)) {
                 fileBytes = FileHelper.reduceImageForUpload(fileBytes);
             }
+            String fileName = FileHelper.getFileName(this, mMediaUri, mFileType);
+            ParseFile file = new ParseFile(fileName, fileBytes);
+            message.put(ParseConstants.KEY_FILE, file);
+            return message;
         }
-
-        return message;
     }
 
     public static MenuItem getMenuItem(){
