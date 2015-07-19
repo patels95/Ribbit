@@ -14,6 +14,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.patels95.sanam.ribbit.R;
+import com.patels95.sanam.ribbit.adapters.MessageAdapter;
 import com.patels95.sanam.ribbit.model.ParseConstants;
 
 import java.util.List;
@@ -52,10 +53,7 @@ public class InboxFragment extends ListFragment {
                         usernames[i] = message.getString(ParseConstants.KEY_SENDER_NAME);
                         i++;
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                            getListView().getContext(),
-                            android.R.layout.simple_list_item_1,
-                            usernames);
+                    MessageAdapter adapter = new MessageAdapter(getListView().getContext(), mMessages);
                     setListAdapter(adapter);
                 }
                 else {
