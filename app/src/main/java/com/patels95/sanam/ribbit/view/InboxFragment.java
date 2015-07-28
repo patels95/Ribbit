@@ -20,6 +20,7 @@ import com.patels95.sanam.ribbit.R;
 import com.patels95.sanam.ribbit.adapters.MessageAdapter;
 import com.patels95.sanam.ribbit.model.ParseConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InboxFragment extends ListFragment {
@@ -95,6 +96,25 @@ public class InboxFragment extends ListFragment {
             Intent intent = new Intent(Intent.ACTION_VIEW, fileUri);
             intent.setDataAndType(fileUri, "video/*");
             startActivity(intent);
+        }
+
+        // delete message
+        List<String> ids =  message.getList(ParseConstants.KEY_RECIPIENT_IDS);
+
+        if (ids.size() == 1){
+            // last recipient - delete the message
+            message.deleteInBackground();
+        }
+        else {
+            // remove this recipient and save
+            ids.remove(ParseUser.getCurrentUser().getObjectId());
+
+            // remove this recipient in parse
+            ArrayList<String> idsToRemove = new ArrayList<>();
+            idsToRemove.add(ParseUser.getCurrentUser().getObjectId());
+            message.removeAll(ParseConstants.KEY_RECIPIENT_IDS, idsToRemove);
+
+            message.saveInBackground();
         }
     }
 }
