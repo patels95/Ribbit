@@ -2,6 +2,7 @@ package com.patels95.sanam.ribbit.view;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -33,6 +34,10 @@ public class SignUpActivity extends ActionBarActivity {
         supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.inject(this);
+
+        // hide the action bar
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
