@@ -11,7 +11,7 @@
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
     <string name="login_button">Login</string>
-    <string name="sign_up_label">Don't have an account? Sign up!</string>
+    <string name="sign_up_label">Don\'t have an account? Sign up!</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="email_hint">Email</string>
     <string name="signup_btn_label">Sign Up</string>
