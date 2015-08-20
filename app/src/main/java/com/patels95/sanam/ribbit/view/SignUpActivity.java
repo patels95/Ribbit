@@ -27,6 +27,7 @@ public class SignUpActivity extends ActionBarActivity {
     @InjectView(R.id.passwordField) EditText mPassword;
     @InjectView(R.id.emailField) EditText mEmail;
     @InjectView(R.id.signupButton) Button mSignUpButton;
+    @InjectView(R.id.cancelButton) Button mCancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +52,11 @@ public class SignUpActivity extends ActionBarActivity {
                 if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
                     builder.setMessage(R.string.signup_error_message)
-                        .setTitle(R.string.signup_error_title)
-                        .setPositiveButton(android.R.string.ok, null);
+                            .setTitle(R.string.signup_error_title)
+                            .setPositiveButton(android.R.string.ok, null);
                     AlertDialog dialog = builder.create();
                     dialog.show();
-                }
-                else {
+                } else {
                     // create the new user
                     setSupportProgressBarIndeterminateVisibility(true);
                     ParseUser newUser = new ParseUser();
@@ -67,14 +67,13 @@ public class SignUpActivity extends ActionBarActivity {
                         @Override
                         public void done(ParseException e) {
                             setSupportProgressBarIndeterminateVisibility(false);
-                            if (e == null){
+                            if (e == null) {
                                 // successful sign up
                                 Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
-                            }
-                            else {
+                            } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
                                 builder.setMessage(e.getMessage())
                                         .setTitle(R.string.signup_error_title)
@@ -85,6 +84,13 @@ public class SignUpActivity extends ActionBarActivity {
                         }
                     });
                 }
+            }
+        });
+
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
