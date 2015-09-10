@@ -34,6 +34,8 @@
         <item name="actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Ribbit</item>
         <item name="android:editTextStyle">@style/EditTextAppTheme</item>
         <item name="actionOverflowButtonStyle">@style/Overflow</item>
+        <item name="android:listViewStyle">@style/Theme.Ribbit.LightPurpleBackground</item>
+        <item name="android:gridViewStyle">@style/Theme.Ribbit.LightPurpleBackground</item>
     </style>
 
     <style name="ActionBar.Solid.Ribbit" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
@@ -94,6 +96,10 @@
 
     <style name="ActionBar.Solid.Ribbit.TitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/text_color</item>
+    </style>
+    
+    <style name="Theme.Ribbit.LightPurpleBackground">
+        <item name="android:background">@color/light_purple_background</item>
     </style>
 
     <!--custom layout styles-->

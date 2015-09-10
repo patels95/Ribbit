@@ -11,14 +11,14 @@
         android:required="true" />
 
     <application
-        android:name=".model.RibbitApplication"
+        android:name=".RibbitApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:logo="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Ribbit">
         <activity
-            android:name=".view.MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -28,42 +28,42 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.LoginActivity"
+            android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".view.SignUpActivity"
+            android:name=".ui.SignUpActivity"
             android:label="@string/title_activity_sign_up"
-            android:parentActivityName=".view.LoginActivity"
+            android:parentActivityName=".ui.LoginActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".view.EditFriendsActivity"
+            android:name=".ui.EditFriendsActivity"
             android:label="@string/title_activity_edit_friends"
-            android:parentActivityName=".view.MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.MainActivity" />
+                android:value=".ui.MainActivity" />
         </activity>
         <activity
-            android:name=".view.RecipientsActivity"
+            android:name=".ui.RecipientsActivity"
             android:label="@string/title_activity_recipients"
-            android:parentActivityName=".view.MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.patels95.sanam.ribbit.view.MainActivity" />
+                android:value="com.patels95.sanam.ribbit.ui.MainActivity" />
         </activity>
         <activity
-            android:name=".view.ViewImageActivity"
+            android:name=".ui.ViewImageActivity"
             android:label="@string/title_activity_view_image"
-            android:parentActivityName=".view.MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.patels95.sanam.ribbit.view.MainActivity" />
+                android:value="com.patels95.sanam.ribbit.ui.MainActivity" />
         </activity>
     </application>
 

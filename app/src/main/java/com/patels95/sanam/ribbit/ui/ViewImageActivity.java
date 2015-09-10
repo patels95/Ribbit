@@ -1,9 +1,8 @@
-package com.patels95.sanam.ribbit.view;
+package com.patels95.sanam.ribbit.ui;
 
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.patels95.sanam.ribbit.R;

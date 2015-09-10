@@ -1,4 +1,4 @@
-package com.patels95.sanam.ribbit.view;
+package com.patels95.sanam.ribbit.ui;
 
 import android.content.Intent;
 import android.net.Uri;

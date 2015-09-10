@@ -1,13 +1,9 @@
-package com.patels95.sanam.ribbit.model;
+package com.patels95.sanam.ribbit;
 
 import android.app.Application;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
-
-/**
- * Created by Sanam on 4/18/15.
- */
 
 public class RibbitApplication extends Application {
 

@@ -1,11 +1,10 @@
-package com.patels95.sanam.ribbit.view;
+package com.patels95.sanam.ribbit.ui;
 
 import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -17,7 +16,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.patels95.sanam.ribbit.R;
-import com.patels95.sanam.ribbit.model.FileHelper;
+import com.patels95.sanam.ribbit.util.FileHelper;
 import com.patels95.sanam.ribbit.model.ParseConstants;
 
 public class RecipientsActivity extends ActionBarActivity

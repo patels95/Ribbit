@@ -1,4 +1,4 @@
-package com.patels95.sanam.ribbit.view;
+package com.patels95.sanam.ribbit.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;

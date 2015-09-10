@@ -1,4 +1,4 @@
-package com.patels95.sanam.ribbit.model;
+package com.patels95.sanam.ribbit.util;
 
 import java.io.ByteArrayOutputStream;
 

@@ -6,8 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.patels95.sanam.ribbit.R;
-import com.patels95.sanam.ribbit.view.FriendsFragment;
-import com.patels95.sanam.ribbit.view.InboxFragment;
+import com.patels95.sanam.ribbit.ui.FriendsFragment;
+import com.patels95.sanam.ribbit.ui.InboxFragment;
 
 import java.util.Locale;
 

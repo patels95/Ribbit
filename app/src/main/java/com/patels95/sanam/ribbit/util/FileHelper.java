@@ -1,4 +1,4 @@
-package com.patels95.sanam.ribbit.model;
+package com.patels95.sanam.ribbit.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -12,6 +12,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
+
+import com.patels95.sanam.ribbit.model.ParseConstants;
 
 public class FileHelper {
 	
