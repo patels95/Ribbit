@@ -2,12 +2,14 @@ package com.patels95.sanam.ribbit.ui;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -19,18 +21,25 @@ import com.patels95.sanam.ribbit.R;
 
 import java.util.List;
 
-public class FriendsFragment extends ListFragment {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+public class FriendsFragment extends Fragment {
 
     public static final String TAG = FriendsFragment.class.getSimpleName();
 
     protected List<ParseUser> mFriends;
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
+    @InjectView(R.id.friendsGrid) GridView mGridView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
+        ButterKnife.inject(this, rootView);
+        TextView emptyTextView = (TextView) rootView.findViewById(android.R.id.empty);
+        mGridView.setEmptyView(emptyTextView);
         return rootView;
     }
 
@@ -58,10 +67,10 @@ public class FriendsFragment extends ListFragment {
                         i++;
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                            getListView().getContext(),
+                            getActivity(),
                             android.R.layout.simple_list_item_1,
                             usernames);
-                    setListAdapter(adapter);
+                    mGridView.setAdapter(adapter);
                 } else {
                     Log.e(TAG, e.getMessage());
                     errorAlert(e);
@@ -71,7 +80,7 @@ public class FriendsFragment extends ListFragment {
     }
 
     private void errorAlert(ParseException e){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getListView().getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(e.getMessage())
                 .setTitle(R.string.error_title)
                 .setPositiveButton(android.R.string.ok, null);
