@@ -1,14 +1,18 @@
 package com.patels95.sanam.ribbit.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.parse.ParseUser;
 import com.patels95.sanam.ribbit.R;
+import com.patels95.sanam.ribbit.util.MD5Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -31,7 +35,7 @@ public class UserAdapter extends ArrayAdapter<ParseUser> {
             // new convertView
             convertView = LayoutInflater.from(mContext).inflate(R.layout.user_item, null);
             holder = new ViewHolder();
-            //holder.iconImageView = (ImageView) convertView.findViewById(R.id.messageIcon);
+            holder.userImageView = (ImageView) convertView.findViewById(R.id.userImageView);
             holder.nameLabel = (TextView) convertView.findViewById(R.id.nameLabel);
             convertView.setTag(holder);
         }
@@ -41,12 +45,24 @@ public class UserAdapter extends ArrayAdapter<ParseUser> {
         }
 
         ParseUser user = mUsers.get(position);
+        String email = user.getEmail().toLowerCase();
+
+        if (email.equals("")){
+            holder.userImageView.setImageResource(R.drawable.avatar_empty);
+        }
+        else{
+            String hash = MD5Util.md5Hex(email);
+            String gravatarUrl = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
+            Picasso.with(mContext).load(gravatarUrl)
+                    .placeholder(R.drawable.avatar_empty)
+                    .into(holder.userImageView);
+        }
 
 //        if (user.getString(ParseConstants.KEY_FILE_TYPE).equals(ParseConstants.TYPE_IMAGE)) {
-//            holder.iconImageView.setImageResource(R.drawable.ic_picture);
+//            holder.userImageView.setImageResource(R.drawable.ic_picture);
 //        }
 //        else {
-//            holder.iconImageView.setImageResource(R.drawable.ic_video);
+//            holder.userImageView.setImageResource(R.drawable.ic_video);
 //        }
         holder.nameLabel.setText(user.getUsername());
 
@@ -54,7 +70,7 @@ public class UserAdapter extends ArrayAdapter<ParseUser> {
     }
 
     private static class ViewHolder {
-        //ImageView iconImageView;
+        ImageView userImageView;
         TextView nameLabel;
     }
 
