@@ -38,10 +38,8 @@ public class FriendsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.user_grid, container, false);
         ButterKnife.inject(this, rootView);
-
         TextView emptyTextView = (TextView) rootView.findViewById(android.R.id.empty);
         mGridView.setEmptyView(emptyTextView);
-
         return rootView;
     }
 

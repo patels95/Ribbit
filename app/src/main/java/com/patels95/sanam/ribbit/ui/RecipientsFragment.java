@@ -4,27 +4,36 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.patels95.sanam.ribbit.R;
+import com.patels95.sanam.ribbit.adapters.UserAdapter;
 import com.patels95.sanam.ribbit.model.ParseConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipientsFragment extends ListFragment {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+public class RecipientsFragment extends Fragment {
 
     public static final String TAG = RecipientsFragment.class.getSimpleName();
 
@@ -35,6 +44,7 @@ public class RecipientsFragment extends ListFragment {
     protected MenuItem mSendMenuItem;
     private OnFragmentInteractionListener mListener;
 
+    @InjectView(R.id.friendsGrid) GridView mGridView;
 
     public static RecipientsFragment newInstance() {
         RecipientsFragment fragment = new RecipientsFragment();
@@ -56,7 +66,11 @@ public class RecipientsFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recipients, container, false);
+        View rootView = inflater.inflate(R.layout.user_grid, container, false);
+        ButterKnife.inject(this, rootView);
+        TextView emptyTextView = (TextView) rootView.findViewById(android.R.id.empty);
+        mGridView.setEmptyView(emptyTextView);
+        return rootView;
     }
 
     public void onButtonPressed(Uri uri) {
@@ -69,7 +83,8 @@ public class RecipientsFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         // allow user to select multiple list items
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        mGridView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        mGridView.setOnItemClickListener(mOnItemClickListener);
 
         mCurrentUser = ParseUser.getCurrentUser();
         mFriendsRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
@@ -91,11 +106,12 @@ public class RecipientsFragment extends ListFragment {
                         usernames[i] = user.getUsername();
                         i++;
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                            getListView().getContext(),
-                            android.R.layout.simple_list_item_checked,
-                            usernames);
-                    setListAdapter(adapter);
+                    if (mGridView.getAdapter() == null) {
+                        UserAdapter adapter = new UserAdapter(getActivity(), mFriends);
+                        mGridView.setAdapter(adapter);
+                    } else {
+                        ((UserAdapter) mGridView.getAdapter()).refill(mFriends);
+                    }
                 } else {
                     Log.e(TAG, e.getMessage());
                     errorAlert(e);
@@ -105,7 +121,7 @@ public class RecipientsFragment extends ListFragment {
     }
 
     private void errorAlert(ParseException e){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getListView().getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(e.getMessage())
                 .setTitle(R.string.error_title)
                 .setPositiveButton(android.R.string.ok, null);
@@ -117,30 +133,37 @@ public class RecipientsFragment extends ListFragment {
     // return value is used in RecipientsActivity
     protected ArrayList<String> getRecipientIds() {
         ArrayList<java.lang.String> recipientIds = new ArrayList<>();
-        for (int i = 0; i < getListView().getCount(); i++){
-            if(getListView().isItemChecked(i)){
+        for (int i = 0; i < mGridView.getCount(); i++){
+            if(mGridView.isItemChecked(i)){
                 recipientIds.add(mFriends.get(i).getObjectId());
             }
         }
         return recipientIds;
     }
 
-    public ListView getList(){
-        return getListView();
-    }
+    protected AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            mSendMenuItem = RecipientsActivity.getMenuItem();
+            ImageView checkImageView = (ImageView) view.findViewById(R.id.checkImageView);
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        mSendMenuItem = RecipientsActivity.getMenuItem();
+            if (mGridView.getCheckedItemCount() > 0){
+                mSendMenuItem.setVisible(true);
+            }
+            else{
+                mSendMenuItem.setVisible(false);
+            }
 
-        if (l.getCheckedItemCount() > 0){
-            mSendMenuItem.setVisible(true);
+            if (mGridView.isItemChecked(position)) {
+                // add recipient
+                checkImageView.setVisibility(View.VISIBLE);
+            }
+            else {
+                // remove recipient
+                checkImageView.setVisibility(View.INVISIBLE);
+            }
         }
-        else{
-            mSendMenuItem.setVisible(false);
-        }
-    }
+    };
 
     @Override
     public void onAttach(Activity activity) {
