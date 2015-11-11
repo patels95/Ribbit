@@ -12,7 +12,9 @@ import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.patels95.sanam.ribbit.R;
@@ -88,6 +90,7 @@ public class RecipientsActivity extends ActionBarActivity
                 if (e == null){
                     // success
                     Toast.makeText(RecipientsActivity.this, R.string.success_message, Toast.LENGTH_LONG).show();
+                    sendPushNotifications();
                 }
                 else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this);
@@ -99,6 +102,13 @@ public class RecipientsActivity extends ActionBarActivity
                 }
             }
         });
+    }
+
+    private void sendPushNotifications() {
+        ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
+        RecipientsFragment recipientsFragment = (RecipientsFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+        query.whereContainedIn(ParseConstants.KEY_USER_ID, recipientsFragment.getRecipientIds());
+
     }
 
     protected ParseObject createMessage() {

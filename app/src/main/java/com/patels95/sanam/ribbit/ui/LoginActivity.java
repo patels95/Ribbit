@@ -15,6 +15,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.patels95.sanam.ribbit.R;
+import com.patels95.sanam.ribbit.RibbitApplication;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -64,6 +65,8 @@ public class LoginActivity extends ActionBarActivity {
                             setSupportProgressBarIndeterminateVisibility(false);
                             if (e == null) {
                                 // successful login
+                                RibbitApplication.updateParseInstallation(parseUser);
+
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

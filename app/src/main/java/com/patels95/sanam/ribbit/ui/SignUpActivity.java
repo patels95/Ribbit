@@ -14,6 +14,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 import com.patels95.sanam.ribbit.R;
+import com.patels95.sanam.ribbit.RibbitApplication;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -67,6 +68,8 @@ public class SignUpActivity extends ActionBarActivity {
                             setSupportProgressBarIndeterminateVisibility(false);
                             if (e == null) {
                                 // successful sign up
+                                RibbitApplication.updateParseInstallation(ParseUser.getCurrentUser());
+
                                 Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
