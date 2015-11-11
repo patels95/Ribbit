@@ -5,15 +5,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -40,7 +43,7 @@ public class RecipientsActivity extends ActionBarActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, RecipientsFragment.newInstance(), getString(R.string.recipients_tag))
                 .commit();
-//        fragmentManager.executePendingTransactions();
+        fragmentManager.executePendingTransactions();
 
         mMediaUri = getIntent().getData();
         mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
@@ -84,15 +87,15 @@ public class RecipientsActivity extends ActionBarActivity
     }
 
     private void send(ParseObject message) {
+        final ParsePush push = sendPushNotifications();
         message.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e == null){
+                if (e == null) {
                     // success
                     Toast.makeText(RecipientsActivity.this, R.string.success_message, Toast.LENGTH_LONG).show();
-                    sendPushNotifications();
-                }
-                else {
+                    push.sendInBackground();
+                } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this);
                     builder.setMessage(getString(R.string.error_sending_message))
                             .setTitle(R.string.error_title)
@@ -104,11 +107,17 @@ public class RecipientsActivity extends ActionBarActivity
         });
     }
 
-    private void sendPushNotifications() {
+    private ParsePush sendPushNotifications() {
         ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
-        RecipientsFragment recipientsFragment = (RecipientsFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+        RecipientsFragment recipientsFragment = (RecipientsFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.recipients_tag));
+        Log.d(TAG, recipientsFragment.toString());
         query.whereContainedIn(ParseConstants.KEY_USER_ID, recipientsFragment.getRecipientIds());
 
+        // send push notification
+        ParsePush push = new ParsePush();
+        push.setQuery(query);
+        push.setMessage(getString(R.string.push_message, ParseUser.getCurrentUser().getUsername()));
+        return push;
     }
 
     protected ParseObject createMessage() {
